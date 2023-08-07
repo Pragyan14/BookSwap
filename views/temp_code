@@ -1,0 +1,33 @@
+// app.post("/signup", (req, res) => {
+//   const { email, password } = req.body;
+
+//   // Check if the email is already registered
+//   const checkQuery = "SELECT * FROM users WHERE email = ?";
+//   db.query(checkQuery, [email], (err, results) => {
+//     if (err) throw err;
+
+//     if (results.length > 0) {
+//       // The email is already registered, handle the error (e.g., show an error message)
+//       return res.render("signup", { error: true });
+//     }
+
+//     // The email is not registered, proceed with user registration
+//     const passwordSalt = crypto.randomBytes(16).toString("hex");
+//     const passwordHash = crypto
+//       .createHash("sha256")
+//       .update(password + passwordSalt)
+//       .digest("hex");
+
+//     const insertQuery =
+//       "INSERT INTO users ( email, password_hash, password_salt) VALUES (?, ?, ?)";
+//     db.query(
+//       insertQuery,
+//       [email, passwordHash, passwordSalt],
+//       (err, results) => {
+//         if (err) throw err;
+//         console.log("New user created and inserted Successfully");
+//         res.redirect("/signin");
+//       }
+//     );
+//   });
+// });

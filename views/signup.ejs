@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/signin.css">
+    <title>BookSwap</title>
+  </head>
+
+  <body>
+    <div id="top">
+      <div id="signIn">
+        <div id="top-heading1">
+          <h1>BookSwap
+            <img id="img1" src="/images/handshake_cropped.png" alt="handshake-png">
+          </h1>
+        </div>
+        <form id="signupForm" method="post" action="/signup" >
+          <div id="top-heading2">
+            <h2>Sign Up</h2>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label> <span class="color-red">*</span> <br>
+            <input type="email" id="email" name="email" required>
+            <p style="color: gray; font-size: 12px;">We'll never share your email with anyone else.</p>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label> <span class="color-red">*</span> <br>
+            <input type="Password" id="password" name="password" placeholder="Atleast 8 character" required>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Confirm Password</label> <span class="color-red">*</span> <br>
+            <input type="Password" name="confirm_password" placeholder="Atleast 8 character" required>
+          </div>
+          <% if (error) { %>
+          <div id="incorrect">
+            <p>Mail already Exists</p>
+          </div>
+          <% } %>
+
+          <button id="btn" type="submit">NEXT</button>
+
+          <p id="createnew">Already have an account? <a href="/signin">SIGN IN</a></p>
+        </form>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="/js/home.js"></script>
+  </body>
+
+</html>
