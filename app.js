@@ -9,34 +9,47 @@ const crypto = require("crypto");
 const ejs = require("ejs");
 const { log, error } = require("console");
 const nodemailer = require("nodemailer");
-
-const Sequelize = require('sequelize');
-const sequelize = new Sequelize('BookSwap', 'root', 'database', {
-  host: 'localhost',
-  dialect: "mysql"
-});
-
-sequelize.authenticate().then(() => {
-   console.log('Connection has been established successfully.');
-}).catch((error) => {
-   console.error('Unable to connect to the database: ', error);
-});
+const { User,TempUser } = require("./models");
 
 const app = express();
 
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: process.env.DATABASEPOSSWORD,
-  database: "BookSwap",
-});
-db.connect((err) => {
-  if (!err) {
-    console.log("successfully connected to mysql database");
-  } else {
-    console.log("error in connectiong the database");
+// Generate random book id
+function generateBookId(userId, bookTitle) {
+  const titlePortion = bookTitle.slice(0, 3);
+
+  const timestampSuffix = Date.now().toString().slice(-6);
+
+  const uniqueId = `BS${userId}${titlePortion}${timestampSuffix}`;
+  return uniqueId.toUpperCase();
+}
+
+// SENDING MAIL FUNCTION
+async function sendOtpEmail(email, otp) {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAILFOROTP,
+        pass: process.env.EMAILPASSWORD,
+      },
+    });
+
+    const mailOptions = {
+      from: "noreply_BookSwap@gmail.com",
+      to: email,
+      subject: "Test Email from BookSwap",
+      text: `This is a test email sent from BookSwap and your OTP is: ${otp}`,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+
+    console.log("Email sent successfully:", info.response);
+    return "Email sent successfully!";
+  } catch (error) {
+    console.error("Error sending email:", error);
+    return "Error sending email.";
   }
-});
+}
 
 // Configure Passport.js
 passport.use(
@@ -45,16 +58,14 @@ passport.use(
       usernameField: "email", // Field name for email in the signin form
       passwordField: "password", // Field name for password in the signin form
     },
-    (email, password, done) => {
-      const query = "SELECT * FROM users WHERE email = ?";
-      db.query(query, [email], (err, results) => {
-        if (err) return done(err);
+    async (email, password, done) => {
+      try {
+        const user = await User.findOne({ where: { email } });
 
-        if (results.length === 0) {
+        if (!user) {
           return done(null, false, { message: "Invalid email or password" });
         }
 
-        const user = results[0];
         const passwordHash = crypto
           .createHash("sha256")
           .update(password + user.password_salt)
@@ -63,28 +74,29 @@ passport.use(
         if (passwordHash !== user.password_hash) {
           return done(null, false, { message: "Invalid email or password" });
         }
-
         return done(null, user);
-      });
+      } catch (err) {
+        return done(err);
+      }
     }
   )
 );
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user.user_id);
 });
 
-passport.deserializeUser((id, done) => {
-  const query = "SELECT * FROM users WHERE id = ?";
-  db.query(query, [id], (err, results) => {
-    if (err) return done(err);
-
-    if (results.length === 0) {
-      return done(new Error("User not found"));
-    }
-
-    return done(null, results[0]);
-  });
+passport.deserializeUser(async (user_id, done) => {
+  User.findOne({ where: { user_id: user_id } })
+    .then((user) => {
+      if (!user) {
+        return done(new Error("User not found"));
+      }
+      return done(null, user);
+    })
+    .catch((err) => {
+      return done(err);
+    });
 });
 
 // Configure middleware
@@ -114,54 +126,10 @@ app.use(
   })
 ); */
 /* -------------------------------------------------------- */
-
 app.use(passport.initialize());
 app.use(passport.session());
 
-/* HOME ROUTE 
--------------------------------------------------------------*/
-app.get("/", (req, res) => {
-  res.render("home");
-});
-
-// app.post("/", (req, res) => {
-//   console.log(req.body);
-//   if (req.body.fName == "pragyan") {
-//     return res.send("yes");
-//   }
-//   return res.send("no");
-// });
-
-/* profile ROUTE 
--------------------------------------------------------------*/
-app.get("/profile", function (req, res) {
-  if (req.isAuthenticated()) {
-    const user = req.user;
-    delete user.password_hash;
-    delete user.password_salt;
-    delete user.created_at;
-    // console.log(user);
-    res.render("profile", { user: user });
-  } else {
-    res.redirect("/signin");
-  }
-});
-
-app.post("/profile",function(req,res){
-  // console.log(req.body);
-  // console.log(req.user);
-  const updateQuery = 'UPDATE users SET full_name=?,contact=?,address=? WHERE id=?';
-  db.query(updateQuery,[req.body.full_name,req.body.contact,req.body.address,req.user.id],(err)=>{
-    if(err){
-      console.log("error in update query of profile: ", err);
-    } else {
-      console.log("profile update success");
-      return res.send("success");
-    }
-  })
-})
-
-/* signin ROUTE 
+/* SIGNIN ROUTE 
 -------------------------------------------------------------*/
 app.get("/signin", (req, res) => {
   res.render("signin", { error: false });
@@ -185,20 +153,10 @@ app.post("/signin", (req, res, next) => {
         return next(err);
       }
 
-      // Redirect to the homer page upon successful signin.
+      // Redirect to the home page upon successful signin.
       return res.redirect("/");
     });
   })(req, res, next);
-});
-
-/* SENDING MAIL 
--------------------------------------------------------------*/
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAILFOROTP,
-    pass: process.env.EMAILPASSWORD,
-  },
 });
 
 /* SIGNUP ROUTE 
@@ -207,60 +165,44 @@ app.get("/signup", (req, res) => {
   res.render("signup", { error: false });
 });
 
-app.post("/signup", function (req, res) {
+app.post("/signup", async function (req, res) {
   const { email, password } = req.body;
 
   // Check if the email is already registered
-  const checkQuery = "SELECT * FROM users WHERE email = ?";
-  db.query(checkQuery, [email], (err, results) => {
-    if (err) throw err;
-
-    if (results.length > 0) {
-      // The email is already registered, handle the error (e.g., show an error message)
-      return res.render("signup", { error: true });
-    }
-
-    // The email is not registered, proceed with user registration (email and password are saved in temp table until users verfiy otp)
-    const passwordSalt = crypto.randomBytes(16).toString("hex");
-    const passwordHash = crypto
-      .createHash("sha256")
-      .update(password + passwordSalt)
-      .digest("hex");
-    const otp = Math.floor(100000 + Math.random() * 900000);
-    const insertQuery =
-      "INSERT INTO temp_users ( email, password_hash, password_salt, otp) VALUES (?, ?, ?,?)";
-
-    /* SENDING MAIL 
-    -------------------------------------------------------------*/
-    const mailOptions = {
-      from: "noreply_BookSwap@gmail.com",
-      to: email,
-      subject: "Test Email from BookSwap",
-      text: "This is a test email sent from BookSwap and your otp is: " + otp,
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log("Error sending email:", error);
-      } else {
-        console.log("Email sent successfully!");
-        // console.log('Response:', info);
+  User.findOne({ attributes: ["email"], where: { email: email } })
+    .then((user) => {
+      if (user) {
+        return res.render("signup", { error: true });
       }
+
+      // The email is not registered, proceed with user registration email and password are saved in temp table until users verfiy otp
+      const otp = Math.floor(100000 + Math.random() * 900000);
+      sendOtpEmail(email, otp);
+
+      const passwordSalt = crypto.randomBytes(16).toString("hex");
+      const passwordHash = crypto
+        .createHash("sha256")
+        .update(password + passwordSalt)
+        .digest("hex");
+
+      TempUser.create({ email: email, password_hash: passwordHash, password_salt: passwordSalt, otp: otp,})
+        .then((createdTempUser) => {
+          console.log(
+            "New user created and inserted successfully in temp table"
+          );
+          res.render("verfiy-otp", {
+            newRecordId: createdTempUser.id,
+            error: false,
+          });
+        })
+        .catch((err) => {
+          console.error("Error creating temp user:", err);
+        });
+    })
+    .catch((err) => {
+      console.error("Error checking existing user:", err);
     });
-
-    db.query(
-      insertQuery,
-      [email, passwordHash, passwordSalt, otp],
-      (err, results) => {
-        if (err) throw err;
-        const newRecordId = results.insertId;
-        console.log("New user created and inserted Successfully in temp table");
-        res.render("verfiy-otp", { newRecordId: newRecordId, error: false });
-      }
-    );
-  });
 });
-
 
 /* VERFIY-OTP ROUTE 
 -------------------------------------------------------------*/
@@ -270,43 +212,102 @@ app.post("/signup", function (req, res) {
 
 app.post("/verfiy-otp", (req, res) => {
   const { id, otp } = req.body;
-  const query = "SELECT * FROM temp_users WHERE id = ? and otp = ?";
-  db.query(query, [id, otp], (err, rows) => {
-    if (err) {
-      return console.log("Error in query: ", err);
-    }
-    if (rows.length === 0) {
-      // Wrong OTP submited by users
-      return res.render("verfiy-otp", {
-        newRecordId: req.body.id,
-        error: true,
-      });
-    }
-    // OTP is verfied, now transfer data from temp table to main table and also delete from temp table
-    const { email, password_hash, password_salt } = rows[0];
-    const transferQuery =
-      "INSERT INTO users(email, password_hash, password_salt) VALUES (?,?,?)";
-    db.query(
-      transferQuery,
-      [email, password_hash, password_salt],
-      (err, result) => {
-        if (err) {
-          return console.log("Error in transfer Query: ", err);
-        }
-        const deleteQuery = "DELETE FROM temp_users WHERE id = ?";
-        db.query(deleteQuery, [id], (err) => {
-          if (err) {
-            return console.log("error in delete query: ", err);
-          }
+  TempUser.findOne({ where: { id: id, otp: otp } })
+    .then((tempUser) => {
+      if (!tempUser) {
+        // Wrong OTP submited by users
+        return res.render("verfiy-otp", { newRecordId: req.body.id, error: true,});
+      }
+
+      // OTP is verfied, now transfer data from temp table to main table and also delete from temp table
+      const { email, password_hash, password_salt } = tempUser;
+      User.create({ email: email, password_hash: password_hash, password_salt: password_salt,})
+        .then(() => {
+          // Delete the temporary record
+          return TempUser.destroy({ where: { id: id } });
+        })
+        .then(() => {
           console.log(
-            "Transfer and delete success from temp table to main table"
+            "Transfer temporary user from temporary table to main table and delete it"
           );
           res.redirect("/signin");
+        })
+        .catch((err) => {
+          console.error("Error in delete and transfer query: ", err);
         });
-      }
-    );
-  });
+    })
+    .catch((err) => {
+      console.log("error in verfiy otp query: ", err);
+    });
 });
+
+/* HOME ROUTE 
+-------------------------------------------------------------*/
+app.get("/", async (req, res) => {
+  res.render("home");
+});
+
+/* PROFILE ROUTE 
+-------------------------------------------------------------*/
+app.get("/profile", function (req, res) {
+  if (req.isAuthenticated()) {
+    const user = req.user;
+    delete user.password_hash;
+    delete user.password_salt;
+    delete user.created_at;
+    // console.log(user);
+    res.render("profile", { user: user });
+  } else {
+    res.redirect("/signin");
+  }
+});
+
+// app.post("/profile", function (req, res) {
+//   const updateQuery =
+//     "UPDATE users SET full_name=?,contact=?,address=? WHERE user_id=?";
+//   db.query(
+//     updateQuery,
+//     [req.body.full_name, req.body.contact, req.body.address, req.user.user_id],
+//     (err) => {
+//       if (err) {
+//         console.log("error in update query of profile: ", err);
+//       } else {
+//         console.log("profile update success");
+//         return res.send("success");
+//       }
+//     }
+//   );
+// });
+
+// UPLOAD BOOK
+// app.post("/uploadBook", (req, res) => {
+//   if (req.isAuthenticated()) {
+//     // console.log(req.body);
+//     const userId = req.user.user_id;
+//     const bookTitle = req.body.title;
+//     const uniqueBookId = generateBookId(userId, bookTitle);
+//     // console.log(uniqueBookId);
+//     const insertQuery =
+//       "INSERT INTO books(book_id,user_id,title,author,book_description) VALUES (?,?,?,?,?)";
+//     db.query(
+//       insertQuery,
+//       [
+//         uniqueBookId,
+//         userId,
+//         req.body.title,
+//         req.body.author,
+//         req.body.book_description,
+//       ],
+//       (err, rows) => {
+//         if (err) {
+//           console.log("Error in insert ", err);
+//         } else {
+//           return res.send("success");
+//         }
+//       }
+//     );
+//   }
+// });
 
 /* LOGOUT ROUTE 
 -------------------------------------------------------------*/

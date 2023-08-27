@@ -1,3 +1,20 @@
+/*Check password and confirm password
+-----------------------------------------*/
+function validatePassword() {
+  var password = $("#password").val();
+  var confirmPassword = $("#confirmPassword").val();
+
+  if (password !== confirmPassword) {
+    $("#password, #confirmPassword").addClass("error");
+    setTimeout(function () {
+      $("#password, #confirmPassword").removeClass("error");
+    }, 10000);
+    return false;
+  } else {
+    return true;
+  }
+}
+
 /*update profile 
 -----------------------------------------*/
 $("#profileForm").submit(function (event) {
@@ -8,7 +25,6 @@ $("#profileForm").submit(function (event) {
   $.post("/profile", formData)
     .done(function (response) {
       if (response == "success") {
-        console.log("Hello");
         $(".success").css("display", "block");
       }
     })
@@ -17,22 +33,20 @@ $("#profileForm").submit(function (event) {
     });
 });
 
-/*Check password and confirm password
+/*Upload book
 -----------------------------------------*/
-
-$("#signupForm").submit(function (event) {
+$("#uploadBookForm").submit(function (event) {
   event.preventDefault();
-  const password = $("#password").val();
-  const confirmPassword = $("#confirm_password").val();
+  const formData = $(this).serialize();
 
-  if (password !== confirmPassword) {
-    $("#confirm_password").addClass("error");
-    setTimeout(function () {
-      $("#confirm_password").removeClass("error");
-    }, 10000);
-  } else {
-    // Handle successful form submission
-    alert("Signup Successful!");
-    // $("#signupForm")[0].reset();
-  }
+  // Send the POST request
+  $.post("/uploadBook", formData)
+    .done(function (response) {
+      if (response == "success") {
+        $(".success").css("display", "block");
+      }
+    })
+    .fail(function (error) {
+      console.error(error);
+    });
 });

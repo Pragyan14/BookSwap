@@ -16,7 +16,7 @@
             <img id="img1" src="/images/handshake_cropped.png" alt="handshake-png">
           </h1>
         </div>
-        <form id="signupForm" method="post" action="/signup" >
+        <form id="signupForm" method="post" action="/signup" onsubmit="return validatePassword()">
           <div id="top-heading2">
             <h2>Sign Up</h2>
           </div>
@@ -25,6 +25,11 @@
             <label for="email">Email</label> <span class="color-red">*</span> <br>
             <input type="email" id="email" name="email" required>
             <p style="color: gray; font-size: 12px;">We'll never share your email with anyone else.</p>
+            <% if (error) { %>
+            <div id="incorrect">
+              <p>Mail already Exists</p>
+            </div>
+            <% } %>
           </div>
 
           <div class="form-group">
@@ -34,13 +39,8 @@
 
           <div class="form-group">
             <label for="password">Confirm Password</label> <span class="color-red">*</span> <br>
-            <input type="Password" name="confirm_password" placeholder="Atleast 8 character" required>
+            <input type="Password" name="confirm_password" id="confirmPassword" placeholder="Atleast 8 character" required>
           </div>
-          <% if (error) { %>
-          <div id="incorrect">
-            <p>Mail already Exists</p>
-          </div>
-          <% } %>
 
           <button id="btn" type="submit">NEXT</button>
 
@@ -49,7 +49,7 @@
       </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<script src="/js/home.js"></script>
+    <script src="/js/index.js"></script>
   </body>
 
 </html>
