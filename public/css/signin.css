@@ -143,10 +143,7 @@ input:focus{
 #img1{
     height: 30px;
 }
-#hide{
-    display: none;
-}
-#show{
+#hide,#show{
     display: none;
 }
 input[type=number]::-webkit-inner-spin-button, 

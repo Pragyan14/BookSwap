@@ -15,6 +15,16 @@ function validatePassword() {
   }
 }
 
+// HAMBURGER MENU
+const myElement = document.getElementById('menu');
+function hamburger() {
+  if (myElement.style.visibility === 'collapse') {
+    myElement.style.visibility = 'visible'; // Show the element
+  } else {
+    myElement.style.visibility = 'collapse'; // Hide the element
+  }
+};
+
 /*update profile 
 -----------------------------------------*/
 $("#profileForm").submit(function (event) {
