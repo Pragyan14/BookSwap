@@ -18,9 +18,18 @@ function validatePassword() {
 // HAMBURGER MENU
 const myElement = document.getElementById('menu');
 function hamburger() {
+  const element2 = document.querySelector("#hambClose"); 
+  const element3 = document.querySelector(".links"); 
+  // document.querySelector("#animID")[0].classList.add("addAnim");
   if (myElement.style.visibility === 'collapse') {
+    element2.classList.remove("fa-bars");
+    element2.classList.add("fa-close");
+    element3.classList.add("addAnim");
     myElement.style.visibility = 'visible'; // Show the element
   } else {
+    element2.classList.remove("fa-close");
+    element2.classList.add("fa-bars");
+    element3.classList.remove("addAnim");
     myElement.style.visibility = 'collapse'; // Hide the element
   }
 };

@@ -1,0 +1,104 @@
+// app.post("/signup", (req, res) => {
+//   const { email, password } = req.body;
+
+//   // Check if the email is already registered
+//   const checkQuery = "SELECT * FROM users WHERE email = ?";
+//   db.query(checkQuery, [email], (err, results) => {
+//     if (err) throw err;
+
+//     if (results.length > 0) {
+//       // The email is already registered, handle the error (e.g., show an error message)
+//       return res.render("signup", { error: true });
+//     }
+
+//     // The email is not registered, proceed with user registration
+//     const passwordSalt = crypto.randomBytes(16).toString("hex");
+//     const passwordHash = crypto
+//       .createHash("sha256")
+//       .update(password + passwordSalt)
+//       .digest("hex");
+
+//     const insertQuery =
+//       "INSERT INTO users ( email, password_hash, password_salt) VALUES (?, ?, ?)";
+//     db.query(
+//       insertQuery,
+//       [email, passwordHash, passwordSalt],
+//       (err, results) => {
+//         if (err) throw err;
+//         console.log("New user created and inserted Successfully");
+//         res.redirect("/signin");
+//       }
+//     );
+//   });
+// });
+
+
+ <!-- PROFILE DATABASE TEMP CODE  -->
+<!--<body>
+     <div class="container">
+      <div id="alert-container">
+
+        <div class="alert-content">
+          <i class="fas fa-solid fa-check check"></i>
+
+          <div class="message">
+            <span class="text text-1">Success</span>
+
+            <span class="text text-2">Your changes has been saved</span>
+          </div>
+        </div>
+      </div>
+      <h1>PROFILE</h1>
+      <div class="wrapper">
+        <div class="profilePic" style="text-align: center">
+          <img style="width: 70%" src="/images/profile.png" alt="profilePic" />
+          <h2>Your Profile</h2>
+        </div>
+        <div class="profileInput">
+          <form action="/profile" method="post" id="profileForm">
+            <div class="inputRow">
+              <label for="email">Eamil</label><br />
+              <input type="text" id="email" name="email" value="<%= user.email %>" disabled required />
+            </div>
+            <div class="inputRow">
+              <label for="full_name">Name</label> <br />
+              <input type="text" id="full_name" name="full_name" placeholder="Full name" value="<%= user.full_name %>"
+                required />
+            </div>
+            <div class="inputRow">
+              <label for="contact">Contact</label><br />
+              <input type="text" id="contact" name="contact" placeholder="Contact" value="<%= user.contact %>"
+                required />
+            </div>
+            <div class="inputRow">
+              <label for="adrress">Address</label><br />
+              <input type="text" id="adrress" name="address" placeholder="Vijay Nagar, Indore"
+                value="<%= user.address %>" required />
+            </div>
+            <button type="submit" class="button-24">Save & Submit</button>
+          </form>
+        </div>
+      </div>
+      <div id="uploadBook">
+        <h2>Upload Book</h2>
+        <form action="/uploadBook" method="POST" id="uploadBookForm">
+          <div class="inputRow">
+            <input type="text" placeholder="Title" name="title" required>
+          </div>
+          <div class="inputRow">
+            <input type="text" placeholder="Author" name="author" required>
+          </div>
+          <div class="inputRow">
+            <input type="text" placeholder="Book description" name="book_description" required>
+          </div>
+          <div class="inputRow">
+            <input type="file" name="bookImage" required>
+          </div>
+
+          <button type="submit" class="button-24">UPLOAD</button>
+        </form>
+      </div>
+    </div>
+  </body>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="/js/index.js"></script> -->

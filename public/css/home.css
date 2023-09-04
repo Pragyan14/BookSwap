@@ -1,9 +1,9 @@
-/* responsive updated styles */
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 /* color palette */
@@ -15,10 +15,30 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   font-family: 'Poppins', sans-serif;
+}
+
+/* SCROLL BAR */
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--secondary);
+
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: var(--tertiary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ec8d3b;
 }
 
 /* HERO SECTION */
@@ -32,57 +52,9 @@ body {
   transition: all .2s ease-in-out;
 }
 
-/* NAVABAR  */
-.navbar {
-  display: flex;
-  text-align: center;
-  justify-content: space-between;
-  color: white;
-  padding: 24px 0;
-  max-width: 90vw;
-  margin: auto;
-}
-
-.logo h2 {
-  font-weight: 500;
-}
-
-.links {
-  display: flex;
-  gap: 52px;
-}
-
-.links a {
-  text-decoration: none;
-  font-size: 20px;
-  font-weight: 200;
-  color: rgba(255, 255, 255, 0.9);
-  transition: all .3s ease-in-out;
-}
-
-.links a:hover,
-.profile a:hover {
-  color: var(--tertiary);
-  color: var(--tertiary);
-  letter-spacing: .3px;
-}
-
-.profile a,
-#hamburger-icon a {
-  color: white;
-  text-decoration: none;
-  transition: all .3s ease-in-out;
-  font-size: 26px;
-}
-
-#hamburger-icon {
-  display: none;
-}
-
 /* HEADING */
 .headings {
-  /* border: 2px solid red; */
-  max-width: 761px;
+  max-width: 800px;
   color: var(--primary);
   margin: auto;
   padding: 18px 0;
@@ -123,15 +95,104 @@ body {
   padding: 12px;
   border: none;
   border-radius: 6px;
+  transition: all .3s ease-in-out;
 }
 
 .btn button:hover {
   opacity: 0.8;
-  transition: 200ms;
 }
 
 .btn button span {
   color: var(--tertiary);
+}
+
+/* EXCHANGE BOOK */
+#exchange{
+  width: 90vw;
+  margin: auto;
+}
+.head {
+  padding: 2rem 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--secondary);
+  text-align: center;
+}
+
+.books {
+  /* text-align: center; */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  /* justify-items: left; */
+  gap: 0 18px;
+}
+
+.book img {
+  height: 200px;
+  size: cover;
+}
+.book {
+  padding: 12px 24px;
+  border: 1px solid var(--primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+
+.insideBook {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.insideBook button {
+  width: 5rem;
+  font-size: 1.2rem;
+  font-weight: 100;
+  padding: .3rem;
+  border: 0;
+  border-radius: 6px;
+  background-color: var(--secondary);
+  color: var(--primary);
+  opacity: 0.8;
+  margin-top: 8px;
+}
+
+.insideBook button:hover {
+  opacity: 0.65;
+  transition: 200ms;
+}
+
+.book h4{
+  font-weight: 600;
+}
+.book h4,
+.book p {
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.more {
+  margin-top: 24px;
+  text-align: right;
+}
+
+.more button {
+  font-size: 1.2rem;
+  font-weight: 200 !important;
+  letter-spacing: 2px;
+  background-color: var(--tertiary);
+  color: var(--secondary);
+  padding: 0.8rem 2.5rem;
+  border: 0;
+  border-radius: 6px;
+}
+
+.more button:hover {
+  opacity: 0.95;
+  transition: 200ms;
 }
 
 /* RESPONSIVE */
@@ -143,6 +204,15 @@ body {
   .hero {
     height: 70vh;
   }
+  .headings {
+    max-width: 752px;
+  }
+
+  /* EXCHANGE BOOK */
+  .books {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 1rem;
+  }
 }
 
 @media screen and (max-width: 768px) {
@@ -150,35 +220,22 @@ body {
     font-size: 12px;
   }
 
+  /* HERO SECTION */
   .hero {
     height: 80vh;
   }
-
-  #hamburger-icon {
-    display: block;
-  }
-
-  .links {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    text-align: right;
-    right: 5%;
-    top: 92px;
-    gap: 24px;
-    visibility: collapse;
-  }
-
-  .profile {
-    order: -1;
-  }
-
-  /* HEADING */
   .headings {
     margin-top: 32px;
   }
-
   .headings h1 {
     font-size: 38px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+
+  /* EXCHANGE BOOK */
+  .books {
+    grid-template-columns: repeat(1, 1fr);
   }
 }

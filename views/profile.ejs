@@ -4,225 +4,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Profile</title>
-    <link rel="stylesheet" href="/css/home.css" />
-    <style>
-      input {
-        padding: 5px 12px;
-        font-size: 14px;
-        line-height: 20px;
-        color: #24292e;
-        vertical-align: middle;
-        background-color: #ffffff;
-        background-repeat: no-repeat;
-        background-position: right 8px center;
-        border: 1px solid black;
-        width: 50%;
-        height: 32px;
-        font-size: 16px;
-        border-radius: 4px;
-        outline: none;
-        box-shadow: rgba(225, 228, 232, 0.2) 0px 1px 0px 0px inset;
-      }
+    <title>BookSwapProfile</title>
+    <!-- font-awesome -->
+    <script src="https://kit.fontawesome.com/04dc8a005d.js" crossorigin="anonymous"></script>
+        
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
-      label {
-        color: #24292e;
-      }
-
-      input:focus {
-        border-color: #ff4742;
-        outline: none;
-      }
-
-      .profilePic,
-      .profileInput,
-      #uploadBook {
-        background-color: #91c8e4;
-        border: 2px solid red;
-        border-radius: 8px;
-        margin-top: 12px;
-        color: black;
-      }
-
-      .wrapper {
-        display: grid;
-        grid-template-columns: 1fr 2fr;
-        grid-column-gap: 12px;
-      }
-
-      .inputRow {
-        margin-bottom: 12px;
-      }
-
-      form {
-        margin: 12px;
-      }
-
-      .alert {
-        position: relative;
-        top: 10;
-        left: 0;
-        width: auto;
-        height: auto;
-        padding: 10px;
-        margin: 10px;
-        line-height: 1.8;
-        border-radius: 5px;
-        cursor: hand;
-        cursor: pointer;
-        font-family: sans-serif;
-        font-weight: 400;
-      }
-
-      .alertCheckbox {
-        display: none;
-      }
-
-      :checked+.alert {
-        display: none;
-      }
-
-      .alertText {
-        display: table;
-        margin: 0 auto;
-        text-align: center;
-        font-size: 16px;
-      }
-
-      .alertClose {
-        float: right;
-        padding-top: 5px;
-        font-size: 10px;
-      }
-
-      .clear {
-        clear: both;
-      }
-
-      .info {
-        background-color: #eee;
-        border: 1px solid #ddd;
-        color: #999;
-      }
-
-
-      #alert-container{
-        position: fixed;
-        border: 2px solid red;
-        height: 100vh;
-        top: 0;
-        /* width: 100vh; */
-      }
-      .alert-content{
-        border-radius: 12px;
-        background: rgba(62, 189, 97, 0.2);
-        padding: 20px 35px 20px 25px;
-        box-shadow: 0 6px 20px -5px rgba(0, 0, 0, 0.1);
-        border: 2px solid #3ebd61;
-      }
-      #alert-container .alert-content {
-        display: flex;
-        align-items: center;
-      }
-
-      .alert-content .check {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 35px;
-        min-width: 35px;
-        background-color: #3ebd61;
-        color: #fff;
-        font-size: 20px;
-        border-radius: 50%;
-      }
-
-      .alert-content .message {
-        display: flex;
-        flex-direction: column;
-        margin: 0 20px;
-      }
-
-      .message .text {
-        font-size: 16px;
-        font-weight: 400;
-        color: #666666;
-      }
-
-      .message .text.text-1 {
-        font-weight: 600;
-        color: #333;
-      } 
-    </style>
+    <link rel="stylesheet" href="/css/profile.css" />
   </head>
 
+  
+
   <body>
-    <div class="container">
-      <!-- <div id="alert-container">
-
-        <div class="alert-content">
-          <i class="fas fa-solid fa-check check"></i>
-
-          <div class="message">
-            <span class="text text-1">Success</span>
-
-            <span class="text text-2">Your changes has been saved</span>
-          </div>
+    <%- include('navbar'); %>
+    <section id="profile">
+      <div class="profileDiv">
+        <div class="profilePhoto">
+          <img src="/images/profile.jpg" alt="">
         </div>
-      </div> -->
-      <h1>PROFILE</h1>
-      <div class="wrapper">
-        <div class="profilePic" style="text-align: center">
-          <img style="width: 70%" src="/images/profile.png" alt="profilePic" />
-          <h2>Your Profile</h2>
-        </div>
-        <div class="profileInput">
-          <form action="/profile" method="post" id="profileForm">
-            <div class="inputRow">
-              <label for="email">Eamil</label><br />
-              <input type="text" id="email" name="email" value="<%= user.email %>" disabled required />
-            </div>
-            <div class="inputRow">
-              <label for="full_name">Name</label> <br />
-              <input type="text" id="full_name" name="full_name" placeholder="Full name" value="<%= user.full_name %>"
-                required />
-            </div>
-            <div class="inputRow">
-              <label for="contact">Contact</label><br />
-              <input type="text" id="contact" name="contact" placeholder="Contact" value="<%= user.contact %>"
-                required />
-            </div>
-            <div class="inputRow">
-              <label for="adrress">Address</label><br />
-              <input type="text" id="adrress" name="address" placeholder="Vijay Nagar, Indore"
-                value="<%= user.address %>" required />
-            </div>
-            <button type="submit" class="button-24">Save & Submit</button>
-          </form>
+        <div class="profileData">
+          
         </div>
       </div>
-      <div id="uploadBook">
-        <h2>Upload Book</h2>
-        <form action="/uploadBook" method="POST" id="uploadBookForm">
-          <div class="inputRow">
-            <input type="text" placeholder="Title" name="title" required>
-          </div>
-          <div class="inputRow">
-            <input type="text" placeholder="Author" name="author" required>
-          </div>
-          <div class="inputRow">
-            <input type="text" placeholder="Book description" name="book_description" required>
-          </div>
-          <div class="inputRow">
-            <input type="file" name="bookImage" required>
-          </div>
-
-          <button type="submit" class="button-24">UPLOAD</button>
-        </form>
-      </div>
-    </div>
+    </section>
   </body>
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-  <script src="/js/index.js"></script>
 
 </html>

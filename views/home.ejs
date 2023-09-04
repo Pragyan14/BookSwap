@@ -5,51 +5,76 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="/css/home.css">
         <title>BookSwap</title>
         <!-- font-awesome -->
         <script src="https://kit.fontawesome.com/04dc8a005d.js" crossorigin="anonymous"></script>
-
-        <!-- importing inter font -->
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
-        </style>
-
+        
         <!-- jQuery -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-
+        
         <!-- GSAP -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
-        
-
+        <!-- LOCAL CSS -->
+        <link rel="stylesheet" href="/css/home.css">
     </head>
 
     <body>
         <div class="hero">
-            <div class="navbar">
-                <div class="logo">
-                    <h2>BookSwap</h2>
-                </div>
-                <div class="links" id="menu">
-                    <a id="animID" href="#" target="_blank" rel="noopener noreferrer">Home</a>
-                    <a id="animID" href="#" target="_blank" rel="noopener noreferrer">About</a>
-                    <a id="animID" href="#" target="_blank" rel="noopener noreferrer">Shop</a>
-                    <a id="animID" href="#" target="_blank" rel="noopener noreferrer">Contact</a>
-                </div>
-                <div class="profile"> <a href="/profile"><i class="fa-solid fa-user"></i></a></div>
-                <div id="hamburger-icon"><a href="javascript:void(0);" id="myAnchor" onclick="hamburger()"><i class="fa-solid fa-bars"></i></a></div>
-            </div>
-
+            <%- include('navbar'); %>
             <div class="headings">
                 <h1 id="animH1">Connecting Book Lovers in Your <span>Neighborhood!</span></h1>
                 <p>A world of literary treasures awaits <span>you</span>, just a doorstep away. With <span>BookSwap</span>, you can discover new books and authors, and connect with fellow <span>book lovers</span> in your community.</p>
             </div>
-    
-            <div class="btn"><button type="button">EXPLORE NOW <span><i class="fa-solid fa-arrow-right"></i></span></button></div>
+
+            <div class="btn"><button type="button">EXPLORE NOW <span><i class="fa-solid fa-arrow-right"></i></span></button>
+            </div>
 
         </div>
-        
+
+        <section id="exchange">
+            <div class="head">
+                <h2>Exchange Now!</h2>
+            </div>
+            <div class="books">
+                <div class="book">
+                    <img src="images/book1.jpg" alt="bookImg">
+                    <div class="insideBook">
+                        <h4>Sherlock Holmes</h4>
+                        <p>By Arthur Nolan</p>
+                        <button type="button">GET</button>
+                    </div>
+                </div>
+                <div class="book">
+                    <img src="images/book3.jpg" alt="bookImg">
+                    <div class="insideBook">
+                        <h4>The diary of a young girl</h4>
+                        <p>By Anne Frank</p>
+                        <button type="button">GET</button>
+                    </div>
+                </div>
+                <div class="book">
+                    <img src="images/book5.jpg" alt="bookImg">
+                    <div class="insideBook">
+                        <h4>Frankenstein</h4>
+                        <p>By Mary Shelley</p>
+                        <button type="button">GET</button>
+                    </div>
+                </div>
+                <div class="book">
+                    <img src="images/book4.jpg" alt="bookImg">
+                    <div class="insideBook">
+                        <h4>Crime punishment</h4>
+                        <p>By Fyodor Dostoevsky</p>
+                        <button type="button">GET</button>
+                    </div>
+                </div>
+            </div>
+            <div class="more">
+                <button type="button"> MORE  <span><i class="fa-solid fa-arrow-right"></i></span></button>
+            </div>
+        </section>
+
         <!-- JavaScript -->
         <script defer src="/js/index.js"></script>
     </body>
