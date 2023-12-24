@@ -1,0 +1,34 @@
+<%- include('header'); %>
+
+<title>Exchange</title>
+
+<link rel="stylesheet" href="/css/exchange.css" />
+</head>
+
+<body>
+    <%- include('navbar'); %>
+  <div class="mainDiv">
+    <!-- <div class="searchBar">
+      <input type="text" name="search" id="search" placeholder="Search by title...">
+    </div> -->
+    <div id="grid">
+      <% for(var i=0;i<books.length;i++) { %>
+      <div class="red">
+        <div class="imgDiv">
+          <img src="/uploads/<%=books[i].book_id %>.jpg" alt="bookImg">
+        </div>
+        <h4><%= books[i].title%></h4>
+        <p>by <%= books[i].author %></p>
+        <a href="/exchange/<%=books[i].book_id%>">
+          <button>GET</button>
+        </a>
+      </div>
+      <% } %>
+    </div>
+  </div>
+  <%- include('footer'); %>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="/js/index.js"></script>
+</body>
+
+</html>

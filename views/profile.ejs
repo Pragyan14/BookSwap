@@ -1,36 +1,137 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include('header'); %>
 
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BookSwapProfile</title>
-    <!-- font-awesome -->
-    <script src="https://kit.fontawesome.com/04dc8a005d.js" crossorigin="anonymous"></script>
-        
-    <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    
-    <!-- GSAP -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<title>BookSwap - Profile</title>
 
-    <link rel="stylesheet" href="/css/profile.css" />
-  </head>
+<link rel="stylesheet" href="/css/profile.css" />
+</head>
 
-  
 
-  <body>
-    <%- include('navbar'); %>
-    <section id="profile">
-      <div class="profileDiv">
-        <div class="profilePhoto">
-          <img src="/images/profile.jpg" alt="">
-        </div>
-        <div class="profileData">
-          
-        </div>
+
+<body>
+  <%- include('navbar'); %>
+
+  <div id="profileSection">
+    <!-- edit button -->
+    <button onclick="editBtm()" id="btnEdit" class="selectEdit" style="padding-right: 1rem;">Edit <i
+        class="fa-solid fa-pencil"></i></button>
+    <button onclick="editBtm()" id="btnEdit" class="selectClose hide"><i class="fa-solid fa-xmark"></i></button>
+    <div id="avatar">
+      <div id="circle">
+        <% if(user.full_name){  %>
+        <h1><%= user.full_name.substring(0,1) %></h1>
+        <% } else { %>
+          <h1>?</h1>
+        <% } %>
       </div>
-    </section>
-  </body>
+    </div>
+
+    <div id="about1" class="">
+      <div class="block">
+        <h3 class="light">Full Name</h3>
+        <h3 class="bold"><%= user.full_name %></h3>
+      </div>
+      <div class="block">
+        <h3 class="light">Email</h3>
+        <h3 class="bold"><%= user.email %></h3>
+      </div>
+      <div class="block">
+        <h3 class="light">Contact</h3>
+        <h3 class="bold"><%= user.contact %></h3>
+      </div>
+      <div class="block">
+        <h3 class="light">Address</h3>
+        <h3 class="bold"><%= user.address %></h3>
+      </div>
+    </div>
+
+    <form method="post" id="about2" class="hide">
+      <div class="block">
+        <h3 class="light">Full Name</h3>
+        <input type="text" class="bold" name="full_name" id="full_name" value="<%= user.full_name %>">
+      </div>
+      <div class="block">
+        <h3 class="light">Email</h3>
+        <input type="text" class="bold" name="email" id="email" value="<%= user.email %>">
+      </div>
+      <div class="block">
+        <h3 class="light">Contact</h3>
+        <input type="text" class="bold" name="contact" id="contact" value="<%= user.contact %>">
+      </div>
+      <div class="block">
+        <h3 class="light">Address</h3>
+        <input type="text" class="bold" name="address" id="address" value="<%= user.address %>">
+      </div>
+      <div>
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+    <div id="aboutEdit">
+    </div>
+  </div>
+
+  <div id="bookUpload">
+    <div id="uploadHeading">
+      <h2 id="chngHTML">Uploades</h2>
+      <button onclick="uploadBook2()" class="bookAdd">Add new book</button>
+      <p id="test" style="font-weight: 100; display: none;">Page <span id="page"></span></p>
+    </div>
+    <div class="hideWhenClicked">
+      <div class="grid">
+        <% if(books.length == 0){ %>
+          <div>
+            <p>NO BOOK ULOADED YET</p>
+          </div>
+       <% } else { for(var i=0;i<4;i++) { %>
+        <div class="book">
+          <img class="bookImg" src="uploads/<%=books[i].book_id %>.jpg" alt="">
+          <p class="bookName"><%=books[i].title  %></p>
+          <p class="authorName"><%=books[i].author %></p>
+        </div>
+        <% }} %>
+      </div>
+      <div class="scrollBtn">
+        <button onclick="prevBook()"><i class="fa-solid fa-less-than"></i></button>
+        <button onclick="nextBook()"><i class="fa-solid fa-greater-than"></i></button>
+      </div>
+    </div>
+    <div class="showWhenClicked hide">
+      <form action="/uploadBook" method="post" enctype="multipart/form-data">
+        <div class="block">
+          <h3 class="light">Book title</h3>
+          <input type="text" name="bookTitle" required autocomplete="false">
+        </div> <br>
+        <div class="block">
+          <h3 class="light">Book author</h3>
+          <input type="text" name="bookAuthor" required autocomplete="false">
+        </div><br>
+        <div class="block">
+          <h3 class="light">Book description</h3>
+          <input type="text" name="bookDescription" required autocomplete="false">
+        </div><br>
+        <div class="block">
+          <h3 class="light">Pages</h3>
+          <input type="number" name="bookPages" required autocomplete="false">
+        </div><br>
+        <div class="block">
+          <h3 class="light">Upload image</h3>
+          <input type="file" name="bookImage" accept=".jpg" required autocomplete="false">
+        </div><br>
+        <div>
+          <button type="submit" id="btnSelect">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <%- include('footer'); %>
+
+  <div class="message" id="showSuccess">
+    <span class="text text-1"><b>Success!&nbsp;</b></span>
+    <span class="text text-2">Your changes has been saved</span>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="/js/index.js"></script>
+</body>
 
 </html>

@@ -13,6 +13,7 @@ const sequelize = new Sequelize("BookSwap", "root", "database", {
     .catch((error) => {
       console.error("Unable to connect to the database: ", error);
     });
+
 const User = sequelize.define(
   "user",
   {
@@ -50,4 +51,33 @@ const TempUser = sequelize.define(
     timestamps: false,
   }
 );
-module.exports = { User, TempUser };
+
+const Book = sequelize.define(
+  "books",
+  {
+    book_id:{
+      type: Sequelize.STRING,
+      primaryKey: true,
+    },
+    user_id: {
+      type: Sequelize.INTEGER,
+      allowNull:"false",
+      references: {
+          model: User,
+          key: "user_id",
+      },
+    },
+    title:Sequelize.STRING,
+    author:Sequelize.STRING,
+    book_description:Sequelize.TEXT,
+    pages:Sequelize.INTEGER,
+    path:Sequelize.INTEGER
+  },
+  {
+    timestamps: false,
+  }
+)
+
+Book.belongsTo(User, { foreignKey: 'user_id' });
+
+module.exports = { User, TempUser, Book };

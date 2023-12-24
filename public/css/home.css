@@ -22,6 +22,10 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
+/* section{
+  width: 90vw;
+  margin: 12px auto;
+} */
 /* SCROLL BAR */
 ::-webkit-scrollbar {
   width: 0.5rem;
@@ -54,7 +58,7 @@ body {
 
 /* HEADING */
 .headings {
-  max-width: 800px;
+  max-width: 768px;
   color: var(--primary);
   margin: auto;
   padding: 18px 0;
@@ -107,10 +111,11 @@ body {
 }
 
 /* EXCHANGE BOOK */
-#exchange{
+#exchange {
   width: 90vw;
-  margin: auto;
+  margin: 12px auto;
 }
+
 .head {
   padding: 2rem 0;
   font-size: 1.5rem;
@@ -120,10 +125,8 @@ body {
 }
 
 .books {
-  /* text-align: center; */
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  /* justify-items: left; */
   gap: 0 18px;
 }
 
@@ -131,6 +134,7 @@ body {
   height: 200px;
   size: cover;
 }
+
 .book {
   padding: 12px 24px;
   border: 1px solid var(--primary);
@@ -165,9 +169,10 @@ body {
   transition: 200ms;
 }
 
-.book h4{
+.book h4 {
   font-weight: 600;
 }
+
 .book h4,
 .book p {
   text-align: center;
@@ -175,7 +180,7 @@ body {
 }
 
 .more {
-  margin-top: 24px;
+  margin-top: 52px;
   text-align: right;
 }
 
@@ -195,6 +200,192 @@ body {
   transition: 200ms;
 }
 
+/* ABOUT SECTION */
+#about {
+  margin-top: 32px;
+}
+
+.about {
+  background-color: var(--primary);
+  /* padding: 3rem 0; */
+}
+
+
+.about h3 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  word-spacing: 2rem;
+  color: var(--secondary);
+  text-align: center;
+  letter-spacing: .7rem;
+  margin-bottom: 1.5rem;
+}
+
+/* BOOK */
+.parent {
+  height: 50vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary);
+}
+
+.aboutBook {
+  outline: 2px solid rgba(0, 0, 0, .1);
+  width: 500px;
+  height: 700px;
+  padding: 32px;
+  background: #FFF;
+  border-left: 30px solid orange;
+  transform: rotate(-45deg) skewX(10deg) scale(.8);
+  box-shadow: -50px 50px 50px rgba(0, 0, 0, 0.5);
+  margin-top: 15rem;
+}
+
+.aboutBook::before {
+  content: "";
+  width: 30px;
+  height: 100%;
+  background: rgb(200, 130, 0);
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: skewY(-45deg) translate(-57px, -43px);
+}
+
+.aboutBook::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  height: 30px;
+  width: 100%;
+  background: rgb(129, 129, 106);
+  transform: skewX(-45deg) translate(-43.2px, 30px);
+}
+
+.aboutBook h4 {
+  margin: 2rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.aboutBook p {
+  font-size: 1.2rem;
+  padding: 1.2rem 2.5rem;
+  text-align: justify
+}
+
+/* TESTIMONAL SECTION */
+#feedback {
+  width: 90vw;
+  margin: 12px auto;
+}
+
+.wrapTesti {
+  display: flex;
+  flex-direction: row;
+  overflow: auto;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+.wrapTesti::-webkit-scrollbar {
+  display: none;
+}
+
+.testi1 {
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  min-width: 28vw;
+  padding: 28px;
+  margin: 0 1.5rem 0 0;
+}
+
+.testi1 p {
+  font-size: 1rem;
+  margin: 0 0 4rem 0;
+}
+
+.testi1 h6 {
+  font-size: .8rem;
+}
+
+.starCont {
+  display: flex;
+  margin: 1rem 0;
+}
+
+.star {
+  background-color: var(--tertiary);
+  width: fit-content;
+  height: fit-content;
+  margin: .2rem;
+}
+
+.star i {
+  color: white;
+  font-size: 0.85rem;
+  margin: 0.3rem;
+}
+
+.scrollBtn {
+  position: relative;
+  text-align: right;
+}
+
+.scrollBtn button {
+  border: 0;
+  background-color: white;
+  /* float: right; */
+  margin-left: 8px;
+}
+
+.circle {
+  border-radius: 100%;
+  border: 1px solid black;
+  padding: 1rem;
+  background-color: white;
+  height: 12px;
+  width: 12px;
+  margin-top: 1rem;
+}
+
+/* FAQ */
+#frequentlyAskedQuestion {
+  background-color: var(--primary);
+}
+
+.FAQ {
+  width: 90vw;
+  margin: auto;
+  padding: 12px 0 92px 0;
+}
+
+.FAQ .head p {
+  color: rgba(0, 0, 0, .75);
+  font-weight: 500;
+  text-align: center;
+  margin: 8px 0 24px 0;
+  font-size: 16px;
+}
+
+.queries {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: space-evenly;
+  justify-items: center;
+  column-gap: 5rem;
+  row-gap: 1rem;
+}
+
+.query p {
+  text-align: left;
+  margin: 1rem 0 2rem 0;
+}
+
+
 /* RESPONSIVE */
 @media screen and (max-width: 992px) {
   body {
@@ -202,8 +393,9 @@ body {
   }
 
   .hero {
-    height: 70vh;
+    height: 80vh;
   }
+
   .headings {
     max-width: 752px;
   }
@@ -215,23 +407,89 @@ body {
   }
 }
 
+/* TABLET VIEW
+------------------------------------------------------- */
 @media screen and (max-width: 768px) {
   body {
     font-size: 12px;
   }
 
   /* HERO SECTION */
-  .hero {
-    height: 80vh;
-  }
   .headings {
     margin-top: 32px;
   }
+
   .headings h1 {
     font-size: 38px;
   }
+
+  /* ABOUT SECTION */
+  .about h3 {
+    font-size: 1rem;
+    word-spacing: .5rem;
+    letter-spacing: .25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .aboutBook {
+    margin-top: 2rem;
+    height: 75vw;
+    width: 40vw;
+  }
+
+  .aboutBook p {
+    font-size: 10.5px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .aboutBook h4 {
+    margin: 0 0 1rem 0;
+    font-size: 12px;
+  }
+
+  .emptySection {
+    height: 0 !important;
+  }
+
+  .about {
+    padding-bottom: 0;
+  }
+
+  /* TESTOMINAL */
+  .star {
+    margin: 0.1rem;
+  }
+
+  .star i {
+    margin: 0.2rem;
+    font-size: 0.8rem;
+  }
+
+  .testi1,
+  .testi {
+    min-width: 80vw;
+    padding: 1.5rem 2rem 1.5rem 1.5rem;
+  }
+
+  .circle {
+    height: 7px;
+    width: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* FAQ */
+  .queries {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  
 }
 
+/* MOBILE VIEW
+------------------------------------------------------- */
 @media screen and (max-width: 576px) {
 
   /* EXCHANGE BOOK */

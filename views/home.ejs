@@ -1,82 +1,232 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include('header'); %>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>BookSwap</title>
-        <!-- font-awesome -->
-        <script src="https://kit.fontawesome.com/04dc8a005d.js" crossorigin="anonymous"></script>
-        
-        <!-- jQuery -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-        
-        <!-- GSAP -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<title>BookSwap</title>
 
-        <!-- LOCAL CSS -->
-        <link rel="stylesheet" href="/css/home.css">
-    </head>
+<!-- LOCAL CSS -->
+<link rel="stylesheet" href="/css/home.css">
+</head>
 
-    <body>
-        <div class="hero">
-            <%- include('navbar'); %>
-            <div class="headings">
-                <h1 id="animH1">Connecting Book Lovers in Your <span>Neighborhood!</span></h1>
-                <p>A world of literary treasures awaits <span>you</span>, just a doorstep away. With <span>BookSwap</span>, you can discover new books and authors, and connect with fellow <span>book lovers</span> in your community.</p>
-            </div>
-
-            <div class="btn"><button type="button">EXPLORE NOW <span><i class="fa-solid fa-arrow-right"></i></span></button>
-            </div>
-
+<body>
+    
+    <div class="hero">
+        <%- include('navbar'); %>
+        <div class="headings">
+            <h1 id="animH1">Connecting Book Lovers in Your <span>Neighborhood!</span></h1>
+            <p>A world of literary treasures awaits <span>you</span>, just a doorstep away. With <span>BookSwap</span>,
+                you can discover new books and authors, and connect with fellow <span>book lovers</span> in your
+                community.</p>
         </div>
 
-        <section id="exchange">
-            <div class="head">
-                <h2>Exchange Now!</h2>
-            </div>
-            <div class="books">
-                <div class="book">
-                    <img src="images/book1.jpg" alt="bookImg">
-                    <div class="insideBook">
-                        <h4>Sherlock Holmes</h4>
-                        <p>By Arthur Nolan</p>
-                        <button type="button">GET</button>
-                    </div>
-                </div>
-                <div class="book">
-                    <img src="images/book3.jpg" alt="bookImg">
-                    <div class="insideBook">
-                        <h4>The diary of a young girl</h4>
-                        <p>By Anne Frank</p>
-                        <button type="button">GET</button>
-                    </div>
-                </div>
-                <div class="book">
-                    <img src="images/book5.jpg" alt="bookImg">
-                    <div class="insideBook">
-                        <h4>Frankenstein</h4>
-                        <p>By Mary Shelley</p>
-                        <button type="button">GET</button>
-                    </div>
-                </div>
-                <div class="book">
-                    <img src="images/book4.jpg" alt="bookImg">
-                    <div class="insideBook">
-                        <h4>Crime punishment</h4>
-                        <p>By Fyodor Dostoevsky</p>
-                        <button type="button">GET</button>
-                    </div>
-                </div>
-            </div>
-            <div class="more">
-                <button type="button"> MORE  <span><i class="fa-solid fa-arrow-right"></i></span></button>
-            </div>
-        </section>
+        <div class="btn">
+            <a href="/exchange"><button type="button">EXPLORE NOW <span><i class="fa-solid fa-arrow-right"></i></span></button> </a>
+        </div>
 
-        <!-- JavaScript -->
-        <script defer src="/js/index.js"></script>
-    </body>
+    </div>
+
+    <section id="exchange">
+        <div class="head">
+            <h2>Exchange Now!</h2>
+        </div>
+        <div class="books">
+            <% for(var i=0;i<4;i++) { %>
+            <div class="book">
+                <img src="uploads/<%=books[i].book_id %>.jpg" alt="bookImg">
+                <div class="insideBook">
+                    <h4><%= books[i].title %></h4>
+                    <p>By <%= books[i].author %></p>
+                    <a href="/exchange/<%=books[i].book_id%>">
+                        <button>GET</button>
+                      </a>
+                </div>
+            </div>
+            <% } %>
+        </div>
+        <div class="more">
+            <a href="/exchange"><button type="button"> MORE <span><i class="fa-solid fa-arrow-right"></i></span></button> </a>
+        </div>
+    </section>
+
+    <!-- <section id="about">
+        <div class="about">
+            <div class="head">
+                <h2>About Us</h2>
+            </div>
+            <hr id="hr">
+            <h3>WHY WE DO WHAT WE DO</h3>
+            <div class="parent">
+                <div class="aboutBook">
+                    <h4>The BookSwap Story</h4>
+                    <hr>
+                    <p>We believe in the transformative power of books. Books can open our minds to new ideas, teach us
+                        about different cultures, and help us to connect with others. Our platform welcomes all book
+                        enthusiasts.
+                    </p><br>
+                    <p>We want to make books more accessible to everyone. Not everyone can afford to buy new books, and
+                        many people simply don't have the space to store them. BookSwap allows people to share their
+                        books with others, making them more affordable and sustainable.</p>
+                </div>
+            </div>
+        </div>
+        <div style="height:50vh; background-color:var(--secondary); box-shadow: 0 5px 10px black;" class="emptySection">
+    </section> -->
+
+    <section id="feedback">
+        <div class="testimonials">
+            <div class="head">
+                <h2>Our testimonials</h2>
+            </div>
+            <div class="wrapTesti">
+                <div class="testi1">
+                    <h4>The support person have good knowledge…</h4>
+                    <div class="starCont">
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                    </div>
+                    <p>The support person have good knowledge and help with good suggestion on improving my setting that
+                        is extraordinary.</p>
+                    <h6>Neeraj Singh</h6>
+                </div>
+
+                <div class="testi1">
+                    <h4>The support person have good knowledge…</h4>
+                    <div class="starCont">
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                    </div>
+                    <p>The support person have good knowledge and help with good suggestion on improving my setting that
+                        is extraordinary.</p>
+                    <h6>Neeraj Singh</h6>
+                </div>
+
+                <div class="testi1">
+                    <h4>The support person have good knowledge…</h4>
+                    <div class="starCont">
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                    </div>
+                    <p>The support person have good knowledge and help with good suggestion on improving my setting that
+                        is extraordinary.</p>
+                    <h6>Neeraj Singh</h6>
+                </div>
+
+                <div class="testi1">
+                    <h4>The support person have good knowledge…</h4>
+                    <div class="starCont">
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="star">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                    </div>
+                    <p>The support person have good knowledge and help with good suggestion on improving my setting that
+                        is extraordinary.</p>
+                    <h6>Neeraj Singh</h6>
+                </div>
+            </div>
+
+            <div class="scrollBtn">
+                <button onclick="scrollPrev()">
+                    <div class="circle circlePrev"><i class="fa-solid fa-less-than"></i></div>
+                </button>
+                <button onclick="scrollNext()">
+                    <div class="circle circleNext"><i class="fa-solid fa-greater-than"></i></div>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="frequentlyAskedQuestion">
+        <div class="FAQ">
+            <div class="head">
+                <h2>Frequently asked questions.</h2>
+                <p>Have a different question and can’t find the answer you’re looking for? </p>
+            </div>
+            <div class="queries">
+                <div class="query">
+                    <h3>Q. What is BookSwap?</h3>
+                    <p>BookSwap is an online platform that allows individuals living in close proximity to exchange
+                        books with each other.</p>
+                </div>
+                <div class="query">
+                    <h3>Q. How does BookSwap work?</h3>
+                    <p>BookSwap works by facilitating book exchanges between two individuals who live near each other.
+                    </p>
+                </div>
+                <div class="query">
+                    <h3>Q. How do I list my books on BookSwap?</h3>
+                    <p>Listing your books on BookSwap is simple. After creating an account, navigate to your profile and
+                        click on the "Add Book" button.</p>
+                </div>
+                <div class="query">
+                    <h3>Q. How do I initiate a book exchange?</h3>
+                    <p>To initiate a book exchange, find a book you'd like to swap and click on it to view the details.
+                        On the book's page, you'll find an option to message the owner.</p>
+                </div>
+                <div class="query">
+                    <h3>Q. Is there a cost to use BookSwap?</h3>
+                    <p>No, BookSwap is a free platform. There are no charges for creating an account, listing your
+                        books, or engaging in book exchanges.</p>
+                </div>
+                <div class="query">
+                    <h3>Q. What is BookSwap?</h3>
+                    <p>BookSwap is an online platform that allows individuals living in close proximity to exchange
+                        books with each other.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <%- include('footer'); %>
+    <!-- JavaScript -->
+    <script defer src="/js/index.js"></script>
+</body>
 
 </html>

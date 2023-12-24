@@ -9,7 +9,22 @@ const crypto = require("crypto");
 const ejs = require("ejs");
 const { log, error } = require("console");
 const nodemailer = require("nodemailer");
-const { User,TempUser } = require("./models");
+const { User, TempUser, Book } = require("./models");
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    return cb(null, "./public/uploads");
+  },
+  filename: function (req, file, cb) {
+    var userId = req.user.user_id;
+    var bookTitle = req.body.bookTitle;
+    const filename = generateBookId(userId, bookTitle) + ".jpg";
+    return cb(null, filename);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 const app = express();
 
@@ -39,6 +54,59 @@ async function sendOtpEmail(email, otp) {
       to: email,
       subject: "Test Email from BookSwap",
       text: `This is a test email sent from BookSwap and your OTP is: ${otp}`,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+
+    console.log("Email sent successfully:", info.response);
+    return "Email sent successfully!";
+  } catch (error) {
+    console.error("Error sending email:", error);
+    return "Error sending email.";
+  }
+}
+
+//exchange request function
+async function exchangeMail(reciversEmail,bookInfo){
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAILFOROTP,
+        pass: process.env.EMAILPASSWORD,
+      },
+    });
+
+    const mailOptions = {
+      from: "noreply_BookSwap@gmail.com",
+      to: reciversEmail,
+      subject: "Book Exchange Request",
+      text: `Dear [Recipient's Name],
+
+I hope this email finds you well. My name is Pragyan, and I recently came across your listing on BookSwap for the book "[Book Title]." I'm interested in exchanging books and would like to propose a book exchange.
+      
+Book Details:
+Title: [Book Title]
+Author: [Author]
+Description: [Brief description, if provided by the user]
+Pages: [Number of Pages, if available]
+
+In exchange, I'm offering the following book from my collection:
+Title: [Your Book Title]
+Author: [Your Book Author]
+Description: [Brief description of your book]
+Pages: [Number of Pages]
+
+If you're interested in this exchange, please let me know. We can coordinate the logistics of the exchange, such as the meeting place and time.
+
+I'm excited about the prospect of sharing books and look forward to your response. If you have any questions or concerns, feel free to reach out.
+
+Thank you for considering my request.
+
+Best regards,
+[Your Full Name]
+[Your Email Address]
+[Your Contact Number]`,
     };
 
     const info = await transporter.sendMail(mailOptions);
@@ -147,14 +215,18 @@ app.post("/signin", (req, res, next) => {
       return res.render("signin", { error: true });
     }
 
+
+    const returnTo = req.session.returnTo;
+    delete req.session.returnTo;
+
     // If the user is found and authentication is successful, log in the user.
     req.login(user, (err) => {
       if (err) {
         return next(err);
       }
-
+      
       // Redirect to the home page upon successful signin.
-      return res.redirect("/");
+      return res.redirect(returnTo || "/");
     });
   })(req, res, next);
 });
@@ -185,7 +257,12 @@ app.post("/signup", async function (req, res) {
         .update(password + passwordSalt)
         .digest("hex");
 
-      TempUser.create({ email: email, password_hash: passwordHash, password_salt: passwordSalt, otp: otp,})
+      TempUser.create({
+        email: email,
+        password_hash: passwordHash,
+        password_salt: passwordSalt,
+        otp: otp,
+      })
         .then((createdTempUser) => {
           console.log(
             "New user created and inserted successfully in temp table"
@@ -216,12 +293,19 @@ app.post("/verfiy-otp", (req, res) => {
     .then((tempUser) => {
       if (!tempUser) {
         // Wrong OTP submited by users
-        return res.render("verfiy-otp", { newRecordId: req.body.id, error: true,});
+        return res.render("verfiy-otp", {
+          newRecordId: req.body.id,
+          error: true,
+        });
       }
 
       // OTP is verfied, now transfer data from temp table to main table and also delete from temp table
       const { email, password_hash, password_salt } = tempUser;
-      User.create({ email: email, password_hash: password_hash, password_salt: password_salt,})
+      User.create({
+        email: email,
+        password_hash: password_hash,
+        password_salt: password_salt,
+      })
         .then(() => {
           // Delete the temporary record
           return TempUser.destroy({ where: { id: id } });
@@ -244,71 +328,102 @@ app.post("/verfiy-otp", (req, res) => {
 /* HOME ROUTE 
 -------------------------------------------------------------*/
 app.get("/", async (req, res) => {
-  res.render("home");
+  const book = await Book.findAll();
+  res.render("home", { books: book, user: req.res });
 });
 
 /* PROFILE ROUTE 
 -------------------------------------------------------------*/
-app.get("/profile", function (req, res) {
+app.get("/profile", async (req, res) => {
   if (req.isAuthenticated()) {
     const user = req.user;
-    delete user.password_hash;
-    delete user.password_salt;
-    delete user.created_at;
-    // console.log(user);
-    res.render("profile", { user: user });
+    const books = await Book.findAll({ where: { user_id: user.user_id } });
+    res.render("profile", { user: user, books: books });
   } else {
+    req.session.returnTo = req.url; //seeting up session variable so that we can redirect here after login 
     res.redirect("/signin");
   }
 });
 
-// app.post("/profile", function (req, res) {
-//   const updateQuery =
-//     "UPDATE users SET full_name=?,contact=?,address=? WHERE user_id=?";
-//   db.query(
-//     updateQuery,
-//     [req.body.full_name, req.body.contact, req.body.address, req.user.user_id],
-//     (err) => {
-//       if (err) {
-//         console.log("error in update query of profile: ", err);
-//       } else {
-//         console.log("profile update success");
-//         return res.send("success");
-//       }
-//     }
-//   );
-// });
+app.post("/updateProfile", function (req, res) {
+  User.update(
+    {
+      full_name: req.body.full_name,
+      contact: req.body.contact,
+      address: req.body.address,
+    },
+    { where: { user_id: req.user.user_id } }
+  )
+    .then((result) => {
+      console.log("profile updated");
+      res.send("success");
+    })
+    .catch((error) => {
+      console.error("Error updating user: ", error);
+    });
+});
 
 // UPLOAD BOOK
-// app.post("/uploadBook", (req, res) => {
-//   if (req.isAuthenticated()) {
-//     // console.log(req.body);
-//     const userId = req.user.user_id;
-//     const bookTitle = req.body.title;
-//     const uniqueBookId = generateBookId(userId, bookTitle);
-//     // console.log(uniqueBookId);
-//     const insertQuery =
-//       "INSERT INTO books(book_id,user_id,title,author,book_description) VALUES (?,?,?,?,?)";
-//     db.query(
-//       insertQuery,
-//       [
-//         uniqueBookId,
-//         userId,
-//         req.body.title,
-//         req.body.author,
-//         req.body.book_description,
-//       ],
-//       (err, rows) => {
-//         if (err) {
-//           console.log("Error in insert ", err);
-//         } else {
-//           return res.send("success");
-//         }
-//       }
-//     );
-//   }
-// });
+app.post("/uploadBook", upload.single("bookImage"), (req, res) => {
+  const filename = req.file.filename;
+  const parts = filename.split(".");
+  const fileNameWithoutExtension = parts.slice(0, -1).join(".");
+  const filePath = req.file.path;
+  const userId = req.user.user_id;
+  const { bookTitle, bookAuthor, bookDescription, bookPages } = req.body;
+  Book.create({
+    book_id: fileNameWithoutExtension,
+    user_id: userId,
+    title: bookTitle,
+    author: bookAuthor,
+    book_description: bookDescription,
+    pages: bookPages,
+    path: filePath,
+  })
+    .then((book) => {
+      console.log("success in book upload with id: ", fileNameWithoutExtension);
+    })
+    .catch((error) => {
+      console.log("Error in book upload query: ", error);
+    });
+  res.redirect("/profile");
+});
 
+/* EXcHANGE ROUTE 
+-------------------------------------------------------------*/
+app.get("/exchange", async (req, res) => {
+  const books = await Book.findAll();
+  res.render("exchange", { books: books });
+});
+
+app.get("/exchange/:bookId",async(req,res) => {
+  if (req.isAuthenticated()) {
+    requestedId = req.params.bookId;
+    const user = req.user;
+    const book = await Book.findOne({
+    attributes: ['book_id','title','author','book_description','pages'],
+    include: {
+        model: User,
+        attributes: ['address','email'],
+    },
+    where: {
+        book_id: requestedId,
+    },
+});
+    res.render("book",{book:book,user:user})
+  } else {
+    req.session.returnTo = req.url; //seeting up session variable so that we can redirect here after login 
+    res.redirect("/signin");
+  }
+  
+})
+
+app.post('/exchangeBookTrial',function(req,res){
+  console.log("info of bookOwner:", req.body.bookInfo);
+  console.log("request sender email",req.user.email);
+  // exchangeMail(req.body.emailTo,'123456');
+  res.send('success');
+})
 /* LOGOUT ROUTE 
 -------------------------------------------------------------*/
 app.get("/logout", function (req, res) {

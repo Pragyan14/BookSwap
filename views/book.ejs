@@ -1,0 +1,42 @@
+<%- include('header'); %>
+
+<title>BookSwap - Book</title>
+
+<link rel="stylesheet" href="/css/book.css" />
+</head>
+
+<body>
+  <%- include('navbar'); %>
+  <div class="detail">
+    <div class="imageDiv">
+      <img class="bookImg" src="/uploads/<%=book.book_id %>.jpg" alt="bookImg">
+    </div>
+    <div class="bookDetail">
+      <h2><%= book.title %></h2>
+      <p><span>Address: </span><%= book.user.address %></p>
+      <p><span>Author: </span><%= book.author %></p>
+      <p><span>Pages: </span><%= book.pages %></p>
+      <button id="exchangeBtn">EXCHANGE</button>
+      <p><span>Book Description: </span><%= book.book_description %></p>
+      <p id="result"></p>
+    </div>
+  </div>
+  <%- include('footer'); %>
+</body>
+<script>
+  $(document).ready(function() {
+    $('#exchangeBtn').click(function() {
+        $.ajax({
+            method:'post',
+            url:'/exchangeBookTrial',
+            data:{bookInfo: '<%=book %>'},
+            success:function(response){
+                $("#result").html(response);
+            }
+        })
+  });
+  });
+  
+</script>
+
+</html>

@@ -1,142 +1,15 @@
-<head>
-    <style>
-        /* responsive updated styles */
-        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
-
-        /* color palette */
-        :root {
-            --primary: #F2EEE4;
-            --secondary: #20262E;
-            --tertiary: #EF9648;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-        }
-
-        /* NAVABAR  */
-        .navbar {
-            display: flex;
-            text-align: center;
-            justify-content: space-between;
-            color: white;
-            padding: 24px 5vw;
-            /* max-width: 90vw; */
-            /* margin: auto; */
-
-            -webkit-box-shadow: inset 0px 200px 74px -134px rgba(0,0,0,0.6);
--moz-box-shadow: inset 0px 200px 74px -134px rgba(0,0,0,0.6);
-box-shadow: inset 0px 200px 74px -134px rgba(0,0,0,0.6);
-        }
-
-        .logo h2 {
-            font-weight: 500;
-        }
-
-        .links {
-            display: flex;
-            gap: 52px;
-        }
-
-        .links a {
-            text-decoration: none;
-            font-size: 20px;
-            font-weight: 200;
-            color: rgba(255, 255, 255, 0.9);
-            transition: all .3s ease-in-out;
-        }
-
-        .links a:hover,
-        .profile a:hover {
-            color: var(--tertiary);
-            color: var(--tertiary);
-            letter-spacing: .3px;
-        }
-
-        .profile a,
-        #hamburger-icon a {
-            color: white;
-            text-decoration: none;
-            transition: all .3s ease-in-out;
-            font-size: 26px;
-        }
-
-        #hamburger-icon {
-            display: none;
-        }
-
-
-        @media screen and (max-width: 768px) {
-            body {
-                font-size: 12px;
-            }
-
-            /* HERO SECTION */
-            #hamburger-icon {
-                display: block;
-            }
-
-            .links {
-                width: 100%;
-                display: flex;
-                flex-direction: column;
-                position: absolute;
-                text-align: center;
-                background-color: var(--secondary);
-                top: 0%;
-                right: 0;
-                left: 0%;
-                gap: 32px;
-                padding: 4rem 0;
-                box-shadow: 0 0 10px 10px var(--secondary);
-                visibility: collapse;
-                transition: all .3s ease-in-out;
-            }
-
-            #hamburger-icon {
-                z-index: 1;
-            }
-
-            .addAnim {
-                animation: fadeIn .5s;
-            }
-
-            @keyframes fadeIn {
-                0% {
-                    opacity: 0%;
-                }
-
-                100% {
-                    opacity: 100%;
-                }
-            }
-
-            .links a {
-                transition: none;
-            }
-
-            .profile {
-                order: -1;
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <div class="navbar">
-        <div class="logo">
-            <h2>BookSwap</h2>
-        </div>
-        <div class="links" id="menu">
-            <a id="animID" href="#">Home</a>
-            <a id="animID" href="#">About</a>
-            <a id="animID" href="#exchange">Shop</a>
-            <a id="animID" href="#">Contact</a>
-        </div>
-        <div class="profile"> <a href="/profile"><i class="fa-solid fa-user"></i></a></div>
-        <div id="hamburger-icon"><a href="javascript:void(0);" id="myAnchor" onclick="hamburger()"><i id="hambClose"
-                    class="fa-solid fa-bars"></i></a></div>
+<div class="navbar">
+    <div class="logo">
+        <h2>BookSwap</h2>
     </div>
-</body>
-
-</html>
+    <div class="links" id="menu">
+        <a id="animID" href="/">Home</a>
+        <a id="animID" href="#">About</a>
+        <a id="animID" href="/exchange">Exchange</a>
+        <a id="animID" href="#">Contact</a>
+    </div>
+    <div class="profile dropdown"> 
+        <a href="/profile"><i class="fa-solid fa-user"></i></a>
+    </div>
+    <div id="hamburger-icon"><a href="javascript:void(0);" id="myAnchor" onclick="hamburger()"><i id="hambClose" class="fa-solid fa-bars"></i></a></div>
+</div>

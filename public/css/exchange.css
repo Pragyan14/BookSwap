@@ -1,0 +1,117 @@
+body {
+  background-color: var(--primary);
+  font-family: "Poppins", sans-serif;
+}
+.searchBar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+#search {
+  width: 100%;
+  padding: 1.2rem;
+  background-color: var(--secondary);
+  outline: 0;
+  border-radius: 15px;
+  margin: 1rem 0;
+}
+#search::placeholder {
+  color: var(--primary);
+  font-size: 1.2rem;
+  font-weight: 200; /* not working */
+}
+.red p {
+  font-size: 14px;
+  font-weight: 200;
+}
+.red button {
+  margin-top: 0.5rem;
+  width: 100%;
+  border-radius: 5px;
+  padding: 6px;
+  border: 1.5px solid var(--secondary);
+  background-color: transparent;
+  transition: 0.3s ease-in-out;
+  font-size: 14px;
+}
+.red button:hover {
+  background-color: #ef9648;
+  outline: 0;
+  border-color: transparent;
+  font-weight: 600;
+}
+.red img,
+.red {
+  width: 200px;
+  margin: auto;
+}
+.mainDiv{
+    width: 90vw;
+    margin: 18px auto;
+
+}
+#grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  row-gap: 2rem;
+}
+/* tablet */
+@media screen and (max-width: 768px) {
+  #search {
+    padding: 1rem;
+  }
+  #search::placeholder {
+    font-size: 15px;
+  }
+  #grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .red img,
+  .red {
+    width: 125px;
+  }
+  .red button {
+    padding: 3px;
+  }
+  .red h4 {
+    font-size: 15px;
+  }
+  .red p {
+    font-size: 12px;
+  }
+}
+
+/* for footer */
+@media screen and (max-width: 1000px) and (min-width: 600px) {
+  .footer a,
+  th {
+    font-size: 0.8rem;
+  }
+}
+
+/* mobile */
+@media screen and (max-width: 480px) {
+  #search {
+    padding: 0.8rem;
+  }
+  #search::placeholder {
+    font-size: 12.5px;
+  }
+  #grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .red img,
+  .red {
+    width: 125px;
+  }
+  .red button {
+    padding: 2px;
+    outline: 1px;
+  }
+  .red h4 {
+    font-size: 13px;
+  }
+  .red p {
+    font-size: 11px;
+  }
+}
